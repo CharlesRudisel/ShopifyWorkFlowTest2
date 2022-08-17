@@ -1,0 +1,264 @@
+<!doctype html>
+<html class="no-js" lang="{{ shop.locale }}" fontify-lang="{{ shop.locale }}">
+
+  
+  
+ <head>{% render 'pagefly-head' %}
+   
+<script src="https://www.googleoptimize.com/optimize.js?id=OPT-KLN4TSS"></script>
+
+   
+<!-- Global site tag (gtag.js) - Google Analytics 
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-S1Z2GKW5J4"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-S1Z2GKW5J4');
+</script>
+  
+   -->
+  <!-- old analytics tag  
+<meta name="google-site-verification" content="Vt3dQXrOIDqMKR8k9ciT1DAQGnIfLWYegzqVcsSWdnw" />
+  
+<meta name="google-site-verification" content="BEVEhnHkB6AaVnI5RH3LvJzXnDblVxxLyArr_xDmiQI" />
+   -->
+   
+   
+<!-- pinterest tag  -->
+  <meta name="p:domain_verify" content="7ab65f3304b23ec8e0ebdd8f456e5853"/>
+<!-- pinterest tag end -->
+   
+   
+   
+  <script type="text/javascript">
+  (function e(){var e=document.createElement("script");e.type="text/javascript",e.async=true,e.src="//staticw2.yotpo.com/77wSkVVPKM0wttZgJyvHTdz74QiWCE2Y0HsTvjrY/widget.js";var t=document.getElementsByTagName("script")[0];t.parentNode.insertBefore(e,t)})();
+  </script> 
+
+   
+  {%- if settings.favicon != blank -%}
+    <link rel="shortcut icon" href="{{ settings.favicon | img_url: '32x32' }}" type="image/png">
+  {%- endif -%}
+{% include 'scapp-customerinfo' %} 
+   
+<!-- pinterest tag  -->
+   
+   
+<script type="text/javascript">
+!function(e){if(!window.pintrk){window.pintrk=function()
+{window.pintrk.queue.push(Array.prototype.slice.call(arguments))};var
+n=window.pintrk;n.queue=[],n.version="3.0";var
+t=document.createElement("script");t.async=!0,t.src=e;var
+r=document.getElementsByTagName("script")[0];r.parentNode.insertBefore(t,r)}}
+("https://s.pinimg.com/ct/core.js"); 
+
+pintrk('load','2614424745532', { em: '{{ customer.email }}', });
+pintrk('page');
+</script> 
+<noscript> 
+<img height="1" width="1" style="display:none;" alt=""
+src="https://ct.pinterest.com/v3/?tid=2614424745532&noscript=1" /> 
+</noscript>
+   
+<!-- pinterest tag end -->
+   
+   
+
+<!-- Start of LittledataLayer -->
+{% include 'LittledataLayer' %}
+<!-- End of LittledataLayer -->
+</head> 
+
+<body class="template-{{ template | split: '.' | first }}">   
+  
+   
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="theme-color" content="{{ settings.color_button }}">
+
+
+
+  {%- capture seo_title -%}
+    {%- if template == 'search' and search.performed == true -%}
+      {{ 'general.search.heading' | t: count: search.results_count }}: {{ 'general.search.results_with_count' | t: terms: search.terms, count: search.results_count }}
+    {%- else -%}
+      {{ page_title }}
+    {%- endif -%}
+    {%- if current_tags -%}
+      {%- assign meta_tags = current_tags | join: ', ' -%} &ndash; {{ 'general.meta.tags' | t: tags: meta_tags -}}
+    {%- endif -%}
+    {%- if current_page != 1 -%}
+      &ndash; {{ 'general.meta.page' | t: page: current_page }}
+    {%- endif -%}
+    {%- assign escaped_page_title = page_title | escape -%}
+    {%- unless escaped_page_title contains shop.name -%}
+      &ndash; {{ shop.name }}
+    {%- endunless -%}
+  {%- endcapture -%}
+  <title>{{ seo_title | strip }}</title>
+
+  {%- if page_description -%}
+    <meta name="description" content="{{ page_description | escape }}">
+  {%- endif -%}
+
+  {% include 'social-meta-tags' %}
+
+  {{ 'theme.scss.css' | asset_url | stylesheet_tag }}
+  
+  
+
+  <script>
+    var theme = {
+      strings: {
+        addToCart: {{ 'products.product.add_to_cart' | t | json }},
+        soldOut: {{ 'products.product.sold_out' | t | json }},
+        unavailable: {{ 'products.product.unavailable' | t | json }},
+        regularPrice: {{ 'products.product.regular_price' | t | json }},
+        sale: {{ 'products.product.on_sale' | t | json }},
+        showMore: {{ 'general.filters.show_more' | t | json }},
+        showLess: {{ 'general.filters.show_less' | t | json }},
+        addressError: {{ 'sections.map.address_error' | t | json }},
+        addressNoResults: {{ 'sections.map.address_no_results' | t | json }},
+        addressQueryLimit: {{ 'sections.map.address_query_limit_html' | t | json }},
+        authError: {{ 'sections.map.auth_error_html' | t | json }},
+        newWindow: {{ 'general.accessibility.link_messages.new_window' | t | json }},
+        external: {{ 'general.accessibility.link_messages.external' | t | json }},
+        newWindowExternal: {{ 'general.accessibility.link_messages.new_window_and_external' | t | json }}
+      },
+      moneyFormat: {{ shop.money_format | json }}
+    }
+
+    document.documentElement.className = document.documentElement.className.replace('no-js', 'js');
+  </script>
+
+
+  {%- if template.directory == 'customers' -%}
+    <script src="{{ 'shopify_common.js' | shopify_asset_url }}" defer="defer"></script>
+  {%- endif -%}
+
+  <script src="{{ 'lazysizes.js' | asset_url }}" async="async"></script>
+  <script src="{{ 'vendor.js' | asset_url }}" defer="defer"></script>
+  <script src="{{ 'theme.js' | asset_url }}" defer="defer"></script>
+  
+  
+  
+  
+  
+  
+  
+  <script src="{{ 'jquery.sticky.js'  | asset_url }}" type="text/javascript" defer="defer"></script>
+<script src="{{ 'hide-header.js'  | asset_url }}" type="text/javascript" defer="defer"></script>
+  
+  
+  
+  
+  
+  
+  
+  {%- if template == 'index' -%}
+  	{{ 'custom-home.css' | asset_url | stylesheet_tag }}
+    {%- endif -%}
+
+  	<script src="{{ 'custom-js.js' | asset_url }}"  defer="defer"></script>
+  
+  
+  {% if collection.handle == 'buy-cbd-for-dogs' %}
+     {{ 'custom-collection.css' | asset_url | stylesheet_tag }}
+  	<script src="{{ 'custom-js.js' | asset_url }}"  defer="defer"></script>
+  {% endif %}
+            
+
+  {{ content_for_header }} 
+ {{ shop.metafields.fontify.stylesheets }}
+
+<!-- QAB 
+<div id="qab_placeholder"></div>
+ END QAB  --> 
+
+{% if template contains 'collection' and current_tags %}
+<meta name="robots" content="noindex" />
+<link rel="canonical" href="{{ shop.url }}{{ collection.url }}" />
+{% else %}
+<link rel="canonical" href="{{ canonical_url }}" />
+{% endif %}
+   
+   
+ 
+{% render 'pagefly-header' %}
+
+
+
+  
+  <a class="in-page-link visually-hidden skip-link" href="#MainContent">{{ 'general.accessibility.skip_to_content' | t }}</a>
+
+  <div id="SearchDrawer" class="search-bar drawer drawer--top" role="dialog" aria-modal="true" aria-label="{{ 'general.search.placeholder' | t }}">
+    <div class="search-bar__table">
+      <div class="search-bar__table-cell search-bar__form-wrapper">
+        <form class="search search-bar__form" action="/search" method="get" role="search">
+          <input class="search__input search-bar__input" type="search" name="q" value="{{ search.terms | escape }}" placeholder="{{ 'general.search.placeholder' | t }}" aria-label="{{ 'general.search.placeholder' | t }}">
+          <button class="search-bar__submit search__submit btn--link" type="submit">
+            {% include 'icon-search' %}
+            <span class="icon__fallback-text">{{ 'general.search.submit' | t }}</span>
+          </button>
+        </form>
+      </div>
+      <div class="search-bar__table-cell text-right">
+        <button type="button" class="btn--link search-bar__close js-drawer-close">
+          {% include 'icon-close' %}
+          <span class="icon__fallback-text">{{ 'general.search.close' | t }}</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  {% section 'header' %}
+
+  <div class="page-container" id="PageContainer">
+
+    <main class="main-content js-focus-hidden" id="MainContent" role="main" tabindex="-1">
+      {{ content_for_layout }}
+    </main>
+
+    {% section 'footer' %}
+
+    <div id="slideshow-info" class="visually-hidden" aria-hidden="true">
+      {{- 'sections.slideshow.navigation_instructions' | t -}}
+    </div>
+
+  </div>
+
+  <ul hidden>
+    <li id="a11y-refresh-page-message">{{ 'general.accessibility.refresh_page' | t }}</li>
+  </ul>
+  
+   
+<!-- Begin wholesale code -->
+{% render 'wholesale-now', customer: customer, template: template, product: product, cart: cart %}
+      {% include 'ldjsonmarbgroup' %}
+<!-- end wholesale code -->
+
+  {% include 'call_now_app_body' %}
+  
+<script>
+window.addEventListener("klaviyoForms", function(e) { 
+  if (e.detail.type == 'submit') {
+    ga('send', 'event', 'Klaviyo form', 'form_submit', e.detail.formId);
+  }
+  if (e.detail.type == 'stepSubmit') {
+    ga('send', 'event', 'Klaviyo form', 'form_step_submit', e.detail.metaData.$step_name);
+  }
+  if (e.detail.type == 'redirectedToUrl') {
+    ga('send', 'event', 'Klaviyo form', 'form_url_redirect', e.detail.formId);
+  }
+  if (e.detail.type == 'close') {
+    ga('send', 'event', 'Klaviyo form', 'form_close', e.detail.formId);
+  }
+});
+</script>    
+  
+</body>  
+</html>
+
+

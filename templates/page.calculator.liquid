@@ -1,0 +1,232 @@
+ <!-- <div class="page-width">
+  <div class="grid">
+    <div class="grid__item medium-up--five-sixths medium-up--push-one-twelfth">
+      <div class="section-header text-center">
+        <h1>{{ page.title }}</h1>
+      </div>
+
+     START CALCULATOR 
+      
+
+      		<div class="calculate">
+              
+            <p style="text-align: center;"><strong>Dosage Calculator</strong></p>
+                          
+            <div class="calculator" id="calculator"">                
+               <label class="petType">
+                    <span>Step 1 - Select Your Type of Pet</span>
+                <select id="petType" oninput="calculate()">
+                    <option value="0"></option>
+                    <option value="dog">Dog</option>
+                    <option value="cat">Cat</option>                 
+                </select>            
+                </label>                                     
+                                                    
+                                                    
+               <label class="weight">
+                    <span>Step 2 - Select Your Pet Weight</span>
+                <select id="weight" oninput="calculate()">
+                    <option value="0"></option>
+                    <option value="5">1 - 5 lb</option>
+                    <option value="10">5 - 10 lb</option>
+                    <option value="15">10 - 15 lb</option>
+					<option value="20">16 - 20 lb</option>
+                    <option value="30">21 - 30 lb</option>
+                    <option value="40">31 - 40 lb</option>
+                    <option value="50">41 - 50 lb</option>
+                    <option value="60">51 - 60 lb</option>
+                    <option value="70">61 - 70 lb</option>
+                    <option value="80">71 - 80 lb</option>
+                    <option value="90">81 - 90 lb</option>                                  
+                    <option value="100">91 - 100 lb</option>
+                    <option value="110">101 - 110 lb</option>
+                    <option value="120">111 - 120 lb</option>
+                    <option value="130">121 - 130 lb</option>
+                    <option value="140">131 - 140 lb</option>
+                    <option value="150">141 - 150 lb</option>
+
+                 
+                </select>            
+                </label>
+
+                <label class="dosage">
+                    <span>Your Calculated Dosage</span>
+                    <ul>
+                    <li>Give your pet <input id="mydosage" disabled  /> 2 or more times a day.</li>
+                    <li>A single 30ml bottle will last <input id="days" disabled /></li>
+       				</ul>
+                </label> 
+
+                <label class="product" style="display:none;">
+                    <span>Recommended Relievet CBD Oil:</span>
+                    <ul>
+                      <li><a href="#test"></a></li>
+       				</ul>
+                </label>                                 
+                                                 
+                                                 
+                <div class="clear"></div>
+
+                
+                
+            </div>
+            </div>
+
+      <style>
+                .calculate .dosage select      {width: 50px; text-align: center;}
+                .calculator         {padding:15px; border:4px solid #eee; margin-bottom: 15px; border-radius:30px; max-width:700px; margin:0 auto;}
+                .calculate          {padding: 0px 0px 15px; clear: both; overflow: hidden;}
+                .calculate h2       {text-transform: inherit; font-size:17px; font-family: Futura,sans-serif;
+    font-style: normal; margin-bottom: 5px; color:#69727b ; font-weight:700; }
+                .calculate label    {float: left; width:96%; margin:4% 2%; position: relative;}
+                .calculate label span {font-size:16px; font-weight: bold; display: block;}
+                .calculate select   {width: 100%; border:none; border-bottom:1px solid #ccc; font-size:18px; padding: 10px;}
+                .condition          {color: #000;}
+                .calculate .dosage  {width:96%; float: left;}
+                .dosage input       {width: 350px; text-align: center; padding-right: 30px; border:none; border-bottom: 1px solid #ccc; font-size: 16px; padding: 10px; margin-top: 5px; -webkit-text-fill-color: #000; opacity: 1;}
+        		.dosage li {list-style:disc; margin-left:20px;}
+        		.calculate button   {margin: 2% 4% 2% 0%; border-radius: 2px; border: 1px solid #2CA9E6; font-size: 14px; padding: 5px 10px; background: #fff;}
+                .calculate #days {width:150px;}
+                .calculate button:hover   {margin: 2% 4% 2% 0%; border: 1px solid #2CA9E6; font-size: 14px; padding: 5px 10px; background: #2CA9E6; color: #fff;}
+                .calculate .clear {clear: both;}
+		        #opencalc {display:block; margin:2% auto;}
+                .product a {background:#29a9e1; padding:15px 10px; text-align:center; font-size:18px; color:#fff;  min-width:65%; display:block; font-weight:bold; margin:10px auto;}
+                @media screen and (max-width:768px) {
+                  .dosage input { font-size: .88235em; }
+                }
+            </style>
+
+
+            <script>
+                                  
+            function calculate() {
+              var petType = document.getElementById("petType").value;
+              var weight = document.getElementById("weight").value;
+
+              if (weight == "0" || petType == "0") {
+                return;
+              }
+
+              if (petType === "dog") {
+                if (weight < 16) {
+                  var mgoil = "5";
+                  var product = "150";
+                  $(".product a").text("150mg Relievet CBD Oil for Small Dogs");
+                  $(".product a").attr(
+                    "href",
+                    "https://www.relievet.com/products/cbd-oil-for-dogs?variant=31401724313700"
+                  );
+                  console.log("dog 150");
+                  $(".product").show();
+                }
+
+                if (41 > weight && weight > 15) {
+                  var mgoil = "13.3";
+                  var product = "400";
+                  $(".product a").text("400mg Relievet CBD Oil for Medium-sized Dogs");
+                  $(".product a").attr(
+                    "href",
+                    "https://www.relievet.com/products/cbd-oil-for-dogs?variant=31401724346468"
+                  );
+                  console.log("dog 400");
+                  $(".product").show();
+                }
+
+                if (91 > weight && weight > 40) {
+                  var mgoil = "26.7";
+                  var product = "800";
+                  $(".product a").text("800mg Relievet CBD Oil for Large Dogs");
+                  $(".product a").attr(
+                    "href",
+                    "https://www.relievet.com/products/cbd-oil-for-dogs?variant=31401724379236"
+                  );
+                  console.log("dog 800");
+                  $(".product").show();
+                }
+
+                if (weight > 90) {
+                  var mgoil = "50";
+                  var product = "1500";
+                  $(".product a").text("1500mg Relievet CBD Oil for Large Dogs");
+                  $(".product a").attr(
+                    "href",
+                    "https://www.relievet.com/products/cbd-oil-for-dogs?variant=31401724412004"
+                  );
+                  console.log("dog 1500");
+                  $(".product").show();
+                }
+              }
+
+              if (petType === "cat") {
+                if (weight < 16) {
+                  var mgoil = "5";
+                  var product = "150";
+                  $(".product a").text("150mg Relievet CBD Oil for Cats");
+                  $(".product a").attr(
+                    "href",
+                    "https://www.relievet.com/products/cbd-oil-for-cats?variant=31401747415140"
+                  );
+                  console.log("cat 150");
+                  $(".product").show();
+                }
+
+                if (41 > weight && weight > 15) {
+                  var mgoil = "13.3";
+                  var product = "400";
+                  $(".product a").text("400mg Relievet CBD Oil for Large Cats");
+                  $(".product a").attr(
+                    "href",
+                    "https://www.relievet.com/products/cbd-oil-for-cats?variant=31401747447908"
+                  );
+                  console.log("cat 400");
+                  $(".product").show();
+                }
+              }
+
+              var dosage = (weight / mgoil) * 0.05;
+              var dosage2 = dosage.toFixed(1);
+              var dosagehigh = (weight / mgoil) * 0.3;
+              var dosagehigh2 = dosagehigh.toFixed(1);
+              var myDays = 30 / (dosage2 * 2);
+              var myDays2 = 30 / (dosagehigh2 * 2);
+              var galabel = petType.concat(" - ", weight, " lb");
+
+              ga("send", "event", "Dosage Calculator", "Calculate", galabel);
+
+              mydosage.value = dosage2 + "ml (" + get_drops(dosage) + ") - " + dosagehigh2 + "ml (" + get_drops(dosagehigh) + ")";
+              $("#mydosage").css("background-color", "yellow");
+
+              days.value = Math.trunc(myDays2) + " - " + Math.trunc(myDays) + " days";
+              $("#days").css("background-color", "yellow");
+            }
+
+            function get_drops(dosage) {
+              var drops = "";
+              if (dosage > 0 && dosage <= .25) {
+                drops = "1/4 dropper";
+              }
+              else if (dosage > .25 && dosage <= .5) {
+                drops = "1/2 dropper";
+              }
+              else if (dosage > .5 && dosage <= .75) {
+                drops = "3/4 dropper";
+              }
+              else if (dosage > .75) {
+                drops = "1 dropper";
+              }
+              return drops;
+            }
+                      
+            </script>
+      
+      
+
+      
+      
+      <div class="rte">
+        {{ page.content }}
+      </div>
+    </div>
+  </div>
+</div>
+-->

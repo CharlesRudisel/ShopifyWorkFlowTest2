@@ -1,0 +1,229 @@
+<div class="new-hero">
+  <div class="calculator">
+  
+    <h2>What CBD Oil is Best for your Pet?</h2>
+    
+    <label class="petType">
+    	<span><b>Step 1:</b> Are you a dog or cat person?</span>
+        <select id="petType" oninput="calculate()">
+        	<option value="0"></option>
+            <option value="dog">Dog</option>
+            <option value="cat">Cat</option>                 
+        </select>            
+    </label>                                     
+                                                    
+                                                    
+    <label class="weight">
+      <span><b>Step 2:</b> Select Your Pet Weight</span>
+        <select id="weight" oninput="calculate()">
+        	<option value="0"></option>
+            <option value="5">1 - 5 lb</option>
+            <option value="10">5 - 10 lb</option>
+            <option value="15">10 - 15 lb</option>
+			<option value="20">16 - 20 lb</option>
+            <option value="30">21 - 30 lb</option>
+            <option value="40">31 - 40 lb</option>
+            <option value="50">41 - 50 lb</option>
+            <option value="60">51 - 60 lb</option>
+            <option value="70">61 - 70 lb</option>
+            <option value="80">71 - 80 lb</option>
+            <option value="90">81 - 90 lb</option>                                  
+            <option value="100">91 - 100 lb</option>
+            <option value="110">101 - 110 lb</option>
+            <option value="120">111 - 120 lb</option>
+            <option value="130">121 - 130 lb</option>
+            <option value="140">131 - 140 lb</option>
+            <option value="150">141 - 150 lb</option>
+
+         </select>            
+   	</label>
+
+    <label>
+    	<span><b>Step 3:</b> Select your Pet's Ailment</span>
+        <select id="condition" oninput="calculate()" >
+        	<option value="0"></option>
+            <option value="0.12">Anxiety</option>
+            <option value="0.120">Agression</option>
+            <option value="0.26">Arthritis</option>
+            <option value="0.09">Depression</option>
+            <option value="0.19">Inflammation</option>
+            <option value="0.16">Mobility</option>
+            <option value="0.23">Pain</option>
+            <option value="0.30">Seizures</option>
+        	<option value="0.05">Well Being</option>
+    	</select>
+   	</label> 
+
+    
+	<label class="product" style="display:none;">
+		<span>Recommended Relievet CBD Oil:</span>
+       	<ul>
+        	<li><a href="https://www.relievet.com/collections/all">View Relievet CBD Collection of Products</a></li>
+       	</ul>
+     </label>                                 
+
+    
+    
+    
+  </div>
+  
+  <div class="overlay"></div>
+
+</div>
+
+{{ content_for_index }}
+{% unless template contains 'article' or template contains 'blog' %}
+<script type="text/javascript"> (function e(){var e=document.createElement("script");e.type="text/javascript",e.async=!0, e.src="//staticw2.yotpo.com/77wSkVVPKM0wttZgJyvHTdz74QiWCE2Y0HsTvjrY/widget.js";var t=document.getElementsByTagName("script")[0]; t.parentNode.insertBefore(e,t)})(); </script>
+<div id='yotpo-testimonials-custom-tab'></div>
+{% endunless %}
+
+<style>
+
+ .new-hero {
+	background:url(https://cdn.shopify.com/s/files/1/0079/3287/0756/t/5/assets/hero-bg.jpg?2366) center center no-repeat;
+    width:100%;
+	background-size:cover;
+   	position:relative;
+    }
+
+  .calculator {
+	display: block;
+    height: 100%;
+    position:relative;
+	top:0;
+    padding:30px;
+	color:#000;
+    z-index:999;
+    overflow:hidden;
+  	}
+
+ 	.overlay {
+      display: block;
+      background: #000;
+      height: 100%;
+      width: 100%;
+      position:absolute;
+      top:0;
+      opacity:0.5;
+      }
+
+  
+	.calculator .dosage select      {width: 50px; text-align: center;}
+    .calculator h2       {text-transform: inherit; color:#fff; font-size:28px; font-family: Helvetica,sans-serif; font-style: normal; margin-bottom: 5px; font-weight:700; }
+	.calculator label    {float: left; color:#fff; width:96%; margin:4% 2% 2%; position: relative;}
+	.calculator label span {font-size:16px; font-weight: bold; display: block;}
+  	.calculator label b 	{color:#29a9e1; text-shadow: 0px 1px 4px #000; text-transform: uppercase;}
+  
+	.calculator select   { width:100%; border:none; border-bottom:1px solid #ccc; font-size:18px; padding: 10px;}
+	.condition          {color: #000;}
+	.calculate button   {margin: 2% 4% 2% 0%; border-radius: 2px; border: 1px solid #2CA9E6; font-size: 14px; padding: 5px 10px; background: #fff;}
+	.calculate #days 	{width:150px;}
+	.calculate button:hover   {margin: 2% 4% 2% 0%; border: 1px solid #2CA9E6; font-size: 14px; padding: 5px 10px; background: #2CA9E6; color: #fff;}
+	.calculate .clear 	{clear: both;}
+	#opencalc 			{display:block; margin:2% auto;}
+  	.product			{text-align:center;}
+  	.product a 			{background:#29a9e1; max-width:550px; padding:15px 10px; text-align:center; font-size:18px; color:#fff;  min-width:65%; display:block; font-weight:bold; margin:10px auto;}                  
+           
+  .template-index .main-content {padding-top:0;}
+
+  @media only screen and (min-width: 600px) {
+    	.calculator, .overlay {left:40%; width:60%;}
+    	.new-hero {background-position:25%; min-height:500px;}
+    	
+
+}
+
+@media only screen and (min-width: 900px) {
+  		/* For desktop: */
+        .calculator, .overlay {left:50%; width:50%;}
+  		.calculator select   {width: 80%;}
+  		.calculator h2 {width:80%;}
+  
+}  
+  
+</style>
+
+<script>
+             
+           
+                function calculate() {
+                    var petType = document.getElementById('petType').value;	
+                    var weight = document.getElementById('weight').value;	
+                    var condition = document.getElementById('condition').value;
+                    var dosage = document.getElementById('dosage');	
+                    var quantity = "1";	
+                                      
+                                      
+                if (condition > 0 && weight > 0 && petType === 'dog') {
+                                   
+                  if (weight < 16) {
+                      $('.product a').text('150mg Relievet CBD Oil for Small Dogs' );
+                      $('.product a').attr("href", "https://www.relievet.com/products/cbd-oil-for-dogs?variant=31401724313700");     
+                      console.log('dog 150');
+                      $('.product').slideDown(500);                                                                           
+					}
+
+                  if (41 > weight && weight > 15) {
+                      $('.product a').text('400mg Relievet CBD Oil for Medium-sized Dogs');
+                      $('.product a').attr("href", "https://www.relievet.com/products/cbd-oil-for-dogs?variant=31401724346468");
+                      console.log('dog 400');
+                      $('.product').slideDown(500);                                                                           
+                  }
+
+                  if (91 > weight && weight > 40) {
+                      $('.product a').text('800mg Relievet CBD Oil for Large Dogs');
+                      $('.product a').attr("href", "https://www.relievet.com/products/cbd-oil-for-dogs?variant=31401724379236");
+                      console.log('dog 800');
+                      $('.product').slideDown(500);                                                                           
+                  }
+
+                  if (weight > 90) {
+                      $('.product a').text('1500mg Relievet CBD Oil for Large Dogs');
+                      $('.product a').attr("href", "https://www.relievet.com/products/cbd-oil-for-dogs?variant=31401724412004");
+                      console.log('dog 1500');
+                      $('.product').slideDown(500);                                                                           
+                  }
+                                                                                                                          
+				};
+                                                                                                                          
+                if (condition > 0 && weight > 0 && petType === 'cat') {
+                                   
+                  if (weight < 16) {
+                      $('.product a').text('150mg Relievet CBD Oil for Cats' );
+                      $('.product a').attr("href", "https://www.relievet.com/products/cbd-oil-for-cats?variant=31401747415140");     
+                      console.log('cat 150');
+                      $('.product').slideDown(500);                                                                           
+
+					}
+
+                  if (41 > weight && weight > 15) {
+                      $('.product a').text('400mg Relievet CBD Oil for Large Cats');
+                      $('.product a').attr("href", "https://www.relievet.com/products/cbd-oil-for-cats?variant=31401747447908");
+                      console.log('cat 400');
+                      $('.product').slideDown(500);                                                                           
+                                                                                                                         
+                  }
+				};
+                                                                                                                          
+
+                    if (weight > 0 && condition > 0) {
+                      
+                      if (condition == "0.12") { var condition2 = "Anxiety"; };
+                      if (condition == "0.120") { var condition2 = "Agression"; };
+                      if (condition == "0.26") { var condition2 = "Arthritis"; };
+                      if (condition == "0.09") { var condition2 = "Depression"; };
+                      if (condition == "0.19") { var condition2 = "Inflammation"; };
+                      if (condition == "0.16") { var condition2 = "Mobility"; };
+                      if (condition == "0.23") { var condition2 = "Pain"; };
+                      if (condition == "0.30") { var condition2 = "Seizures"; };
+                      if (condition == "0.05") { var condition2 = "Well Being"; };
+
+                      var galabel = condition2.concat(" - ", weight, " lb");
+
+        
+   						ga('send', 'event', 'Product Selector', 'Search', galabel);
+
+                                                            
+                    }
+                }
+            </script>

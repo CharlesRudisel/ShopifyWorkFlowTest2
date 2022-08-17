@@ -1,0 +1,707 @@
+<div class="page-width">
+  <div class="grid">
+    <div class="grid__item medium-up--five-sixths medium-up--push-one-twelfth">
+      <div class="section-header text-center">
+        <h1>{{ page.title }}</h1>
+      </div>
+      
+      <div class="rte" id="calculator-container">
+        
+{% comment %}
+=============================================
+SELECT ANIMAL
+=============================================
+{% endcomment %}
+
+  <style>
+    .animal_flexbox_container {display:flex; justify-content: space-between;}
+    .weight_input_container {text-align: center;}
+    p.lead {font-size: 1.5rem; font-weight: bold;}
+    .text-center {text-align: center;}
+    input#weight_input {width: 50%; font-size: 2rem;}
+    
+    label img {width: 120px; height: 120px; padding:10px;}
+    #product_container {
+    display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+.product_item {
+    border-bottom: 1px solid #ddd;
+    background: #fefefe;
+    padding: 10px;
+  flex: 2 0 49%;
+  display: flex;
+  gap: 25px;
+}
+    
+.product_item:hover {
+    background: #fafafa;
+}
+        </style>
+        
+        <p class="lead text-center">Pick your animal:</p>
+<div class="animal_flexbox_container">
+  
+  <label>
+    <input type="radio" name="animal" value="dog" checked>
+    <img src="https://cdn.shopify.com/s/files/1/0079/3287/0756/files/dog.png" alt="Dog">
+  </label>
+  
+  <label>
+    <input type="radio" name="animal" value="cat">
+    <img src="https://cdn.shopify.com/s/files/1/0079/3287/0756/files/cat.png" alt="Cat">
+  </label>
+  
+  <label>
+    <input type="radio" name="animal" value="bird">
+    <img src="https://cdn.shopify.com/s/files/1/0079/3287/0756/files/parrot.png" alt="Bird">
+  </label>
+  
+  <label>
+    <input type="radio" name="animal" value="horse">
+    <img src="https://cdn.shopify.com/s/files/1/0079/3287/0756/files/horse.png" alt="Horse">
+  </label>
+</div>
+        
+<hr>
+        
+{% comment %}
+=============================================
+WEIGHT
+=============================================
+{% endcomment %}
+        
+        
+        
+<div class="weight_input_container">
+<p class="lead">Type your pet's weight:</p>
+
+  <input name="weight_input" type="number" min="1" max="200" id="weight_input" required />
+  <p id="weight_unit">pounds (lb)</p>
+</div>
+
+<hr>
+        
+{% comment %}
+=============================================
+SELECT PRODUCT CATEGORY
+=============================================
+
+
+        
+        <p>Product Category:</p>
+
+        <label>
+  <input type="radio" name="product_category" value="cbd_oil" checked>
+  <img src="https://via.placeholder.com/120x60/0bf/fff&text=CBD-Oils">
+</label>
+        
+                <label>
+  <input type="radio" name="product_category" value="cbd_treats_120">
+  <img src="https://via.placeholder.com/120x60/0bf/fff&text=Treats-120">
+</label>
+        
+<label>
+  <input type="radio" name="product_category" value="cbd_treats_5">
+  <img src="https://via.placeholder.com/120x60/0bf/fff&text=Treats-5">
+</label>
+        
+<hr>
+{% endcomment %}
+        
+        
+{% comment %}
+=============================================
+PRODUCT
+=============================================
+{% endcomment %}
+        
+        <p>Select product and check the results below</p>
+        
+        <div id="product_container">
+        Fill up the criteria above
+        </div>
+
+<hr>
+
+        <p>Results</p>
+<div id="calculate_info">
+
+        </div>
+
+<hr>
+        
+        
+        
+      </div>
+
+      <div class="rte">
+        {{ page.content }}
+      </div>
+    </div>
+  </div>
+</div>
+
+<style>
+ /* HIDE RADIO */
+[type=radio] { 
+  position: absolute;
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+/* IMAGE STYLES */
+[type=radio] + img {
+  cursor: pointer;
+  border-radius: 4px;
+}
+
+/* CHECKED STYLES */
+[type=radio]:checked + img {
+-webkit-box-shadow: 0px 0px 10px 0px rgba(50, 50, 50, 0.3);
+-moz-box-shadow: 0px 0px 10px 0px rgba(50, 50, 50, 0.3);
+box-shadow: 0px 0px 10px 0px rgba(50, 50, 50, 0.3);
+  border: 2px solid lightskyblue ;
+}
+</style>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/lodash@4.17.21/lodash.min.js" integrity="sha256-qXBd/EfAdjOA2FGrGAG+b3YBn2tn5A6bhz+LSgYD96k=" crossorigin="anonymous"></script>
+
+<script>
+  var checked_animal = 'dog';
+  var dog_array = { "min": 1, "max": 200, "unit": "lb" };
+  var cat_array = { "min": 1, "max": 30, "unit": "lb" };
+  var bird_array = { "min": 63, "max": 1000, "unit": "g" };
+  var horse_array = { "min": 200, "max": 2000, "unit": "lb" };
+  
+  var weight_input = $("input[name='weight_input']");
+  var weight_unit = $("#weight_unit");
+  
+  var animal_weight = weight_input.val();
+  
+  
+  var product_category = 'cbd_oil';
+  
+  var filtered_results = [];
+  
+  
+  
+var products = [
+  
+  // cbd oils
+  { 'name': 'CBD Oil',  'animal': 'dog', 'category': 'cbd_oil', 'min_weight': 1, 'max_weight': 5, 'bottle_volume': 30, 'mg_cbd': 150, 'variant_id': 31401724313700, 'handle': 'cbd-oil-for-dogs' },
+  { 'name': 'CBD Oil',  'animal': 'dog', 'category': 'cbd_oil', 'min_weight': 1, 'max_weight': 15, 'bottle_volume': 30, 'mg_cbd': 400, 'variant_id': 31401724346468, 'handle': 'cbd-oil-for-dogs' },
+  { 'name': 'CBD Oil',  'animal': 'dog', 'category': 'cbd_oil', 'min_weight': 2, 'max_weight': 30, 'bottle_volume': 30, 'mg_cbd': 800, 'variant_id': 31401724379236, 'handle': 'cbd-oil-for-dogs' },
+  { 'name': 'CBD Oil',  'animal': 'dog', 'category': 'cbd_oil', 'min_weight': 4, 'max_weight': 60, 'bottle_volume': 30, 'mg_cbd': 1500, 'variant_id': 31401724412004, 'handle': 'cbd-oil-for-dogs' },
+  { 'name': 'CBD Oil',  'animal': 'dog', 'category': 'cbd_oil', 'min_weight': 10, 'max_weight': 150, 'bottle_volume': 30, 'mg_cbd': 4000, 'variant_id': 42345057190105, 'handle': 'cbd-oil-for-dogs' },
+  { 'name': 'CBD Oil',  'animal': 'dog', 'category': 'cbd_oil', 'min_weight': 15, 'max_weight': 200, 'bottle_volume': 30, 'mg_cbd': 6000, 'variant_id': 42345057222873, 'handle': 'cbd-oil-for-dogs' },
+  { 'name': 'CBD Oil',  'animal': 'cat', 'category': 'cbd_oil', 'min_weight': 1, 'max_weight': 5, 'bottle_volume': 30, 'mg_cbd': 150, 'variant_id': 31401747415140, 'handle': 'cbd-oil-for-cats' },
+  { 'name': 'CBD Oil',  'animal': 'cat', 'category': 'cbd_oil', 'min_weight': 1, 'max_weight': 15, 'bottle_volume': 30, 'mg_cbd': 400, 'variant_id': 31401747447908, 'handle': 'cbd-oil-for-cats' },
+  { 'name': 'CBD Oil',  'animal': 'cat', 'category': 'cbd_oil', 'min_weight': 2, 'max_weight': 30, 'bottle_volume': 30, 'mg_cbd': 800, 'variant_id': 42344795242713, 'handle': 'cbd-oil-for-cats' },
+  { 'name': 'CBD Oil',  'animal': 'bird', 'category': 'cbd_oil', 'min_weight': 63, 'max_weight': 1000, 'bottle_volume': 30, 'mg_cbd': 30, 'variant_id': 000000000000000, handle: 'cbd-oil-for-parrots-cockatiels-and-conures' },
+  { 'name': 'CBD Oil',  'animal': 'horse', 'category': 'cbd_oil', 'min_weight': 200, 'max_weight': 2000, 'bottle_volume': 60, 'mg_cbd': 20000, 'variant_id': 000000000000000, 'handle': 'cbd-oil-for-horses' },
+  
+  // cbd treats - 120 treats per container
+  { 'name': 'Sweet Potato',  'animal': 'dog', 'category': 'cbd_treats_120', 'min_weight': 1, 'max_weight': 5, 'mg_cbd': 240, 'treats_per_container': 120, 'variant_id': 42267541930201, handle: 'sweet-potato' },
+  { 'name': 'Beef Liver',  'animal': 'dog', 'category': 'cbd_treats_120', 'min_weight': 1, 'max_weight': 5, 'mg_cbd': 240, 'treats_per_container': 120, 'variant_id': 42267488944345, handle: 'beef-liver' },
+  { 'name': 'Salmon',  'animal': 'dog', 'category': 'cbd_treats_120', 'min_weight': 1, 'max_weight': 5, 'mg_cbd': 240, 'treats_per_container': 120, 'variant_id': 42267602419929, handle: 'salmon' },
+
+  { 'name': 'Sweet Potato',  'animal': 'dog', 'category': 'cbd_treats_120', 'min_weight': 6, 'max_weight': 30, 'mg_cbd': 1200, 'treats_per_container': 120, 'variant_id': 42267541962969, handle: 'sweet-potato' },
+  { 'name': 'Beef Liver',  'animal': 'dog', 'category': 'cbd_treats_120', 'min_weight': 6, 'max_weight': 30, 'mg_cbd': 1200, 'treats_per_container': 120, 'variant_id': 42267488977113, handle: 'beef-liver' },
+  { 'name': 'Salmon',  'animal': 'dog', 'category': 'cbd_treats_120', 'min_weight': 6, 'max_weight': 30, 'mg_cbd': 1200, 'treats_per_container': 120, 'variant_id': 42267602452697, handle: 'salmon' },
+
+  { 'name': 'Sweet Potato',  'animal': 'dog', 'category': 'cbd_treats_120', 'min_weight': 31, 'max_weight': 90, 'mg_cbd': 6000, 'treats_per_container': 120, 'variant_id': 42267541995737, handle: 'sweet-potato' },
+  { 'name': 'Beef Liver',  'animal': 'dog', 'category': 'cbd_treats_120', 'min_weight': 31, 'max_weight': 90, 'mg_cbd': 6000, 'treats_per_container': 120, 'variant_id': 42267489009881, handle: 'beef-liver' },
+  { 'name': 'Salmon',  'animal': 'dog', 'category': 'cbd_treats_120', 'min_weight': 31, 'max_weight': 90, 'mg_cbd': 6000, 'treats_per_container': 120, 'variant_id': 42267602485465, handle: 'salmon' },
+
+  { 'name': 'Sweet Potato',  'animal': 'dog', 'category': 'cbd_treats_120', 'min_weight': 91, 'max_weight': 200, 'mg_cbd': 9600, 'treats_per_container': 120, 'variant_id': 42267542028505, handle: 'sweet-potato' },
+  { 'name': 'Beef Liver',  'animal': 'dog', 'category': 'cbd_treats_120', 'min_weight': 91, 'max_weight': 200, 'mg_cbd': 9600, 'treats_per_container': 120, 'variant_id': 42267489042649, handle: 'beef-liver' },
+  { 'name': 'Salmon',  'animal': 'dog', 'category': 'cbd_treats_120', 'min_weight': 91, 'max_weight': 200, 'mg_cbd': 9600, 'treats_per_container': 120, 'variant_id': 42267602518233, handle: 'salmon' },
+
+  { 'name': 'Tuna',  'animal': 'cat', 'category': 'cbd_treats_120', 'min_weight': 1, 'max_weight': 5, 'mg_cbd': 240, 'treats_per_container': 120, 'variant_id': 42267659796697, handle: 'cats-tuna' },
+  { 'name': 'Salmon',  'animal': 'cat', 'category': 'cbd_treats_120', 'min_weight': 1, 'max_weight': 5, 'mg_cbd': 240, 'treats_per_container': 120, 'variant_id': 42267612446937, handle: 'cats-salmon' },
+
+  { 'name': 'Tuna',  'animal': 'cat', 'category': 'cbd_treats_120', 'min_weight': 6, 'max_weight': 30, 'mg_cbd': 1200, 'treats_per_container': 120, 'variant_id': 42267659829465, handle: 'cats-tuna' },
+  { 'name': 'Salmon',  'animal': 'cat', 'category': 'cbd_treats_120', 'min_weight': 6, 'max_weight': 30, 'mg_cbd': 1200, 'treats_per_container': 120, 'variant_id': 42267612479705, handle: 'cats-salmon' },
+  
+  // cbd treats - 5 treats per container
+  { 'name': 'Sweet Potato',  'animal': 'dog', 'category': 'cbd_treats_5', 'min_weight': 3, 'max_weight': 20, 'mg_cbd': 50, 'treats_per_container': 5, 'variant_id': 42267026882777, handle: 'sweet-potato-5-count' },
+  { 'name': 'Beef Liver',  'animal': 'dog', 'category': 'cbd_treats_5', 'min_weight': 3, 'max_weight': 20, 'mg_cbd': 50, 'treats_per_container': 5, 'variant_id': 42267027079385, handle: 'beef-liver-5-count' },
+  { 'name': 'Salmon',  'animal': 'dog', 'category': 'cbd_treats_5', 'min_weight': 3, 'max_weight': 20, 'mg_cbd': 50, 'treats_per_container': 5, 'variant_id': 42266996474073, handle: 'salmon-5-count' },
+
+  { 'name': 'Sweet Potato',  'animal': 'dog', 'category': 'cbd_treats_5', 'min_weight': 21, 'max_weight': 100, 'mg_cbd': 250, 'treats_per_container': 5, 'variant_id': 42267026915545, handle: 'sweet-potato-5-count' },
+  { 'name': 'Beef Liver',  'animal': 'dog', 'category': 'cbd_treats_5', 'min_weight': 21, 'max_weight': 100, 'mg_cbd': 250, 'treats_per_container': 5, 'variant_id': 42267027112153, handle: 'beef-liver-5-count' },
+  { 'name': 'Salmon',  'animal': 'dog', 'category': 'cbd_treats_5', 'min_weight': 21, 'max_weight': 100, 'mg_cbd': 250, 'treats_per_container': 5, 'variant_id': 42266996506841, handle: 'salmon-5-count' },
+
+  { 'name': 'Tuna',  'animal': 'cat', 'category': 'cbd_treats_5', 'min_weight': 3, 'max_weight': 20, 'mg_cbd': 50, 'treats_per_container': 5, 'variant_id': 42266834731225, handle: 'cats-tuna-5-count' },
+  { 'name': 'Salmon',  'animal': 'cat', 'category': 'cbd_treats_5', 'min_weight': 3, 'max_weight': 20, 'mg_cbd': 50, 'treats_per_container': 5, 'variant_id': 42266968981721, handle: 'cats-salmon-5-count' }
+];
+  
+$(document).ready(function(){
+  
+  
+  
+        $("input[name='animal']").click(function(){
+          
+          checked_animal = $("input[name='animal']:checked").val();
+          weight_input.val('');
+          filtered_results = [];
+          
+          
+switch (checked_animal) {
+  case 'dog':
+    weight_input.attr("min", dog_array['min']).attr("max", dog_array['max']);
+    weight_unit.text("pounds (lb)");
+    break;
+  case 'cat':
+    weight_input.attr("min", cat_array['min']).attr("max", cat_array['max']);
+    weight_unit.text("pounds (lb)");
+    break;
+  case 'bird':
+    weight_input.attr("min", bird_array['min']).attr("max", bird_array['max']);
+    weight_unit.text("grams (g)");
+    break;
+  case 'horse':
+    weight_input.attr("min", horse_array['min']).attr("max", horse_array['max']);
+    weight_unit.text("pounds (lb)");
+    break;
+  default:
+    weight_input.attr("min", dog_array['min']).attr("max", dog_array['max']);
+    weight_unit.text("pounds (lb)");
+}
+          
+
+          
+});
+  
+  
+   weight_input.change(function(){
+     animal_weight = weight_input.val();
+     
+     });
+  
+  $("input").change(function(){
+          
+
+    
+    filtered_results = _.filter(
+      products, ({animal, category, min_weight, max_weight}) => 
+      animal == checked_animal && 
+      animal_weight >= min_weight &&
+      animal_weight <= max_weight
+    )
+    
+
+    // console.log(filtered_results);
+          
+});
+  
+  
+  $('input').change(function() {
+    
+    console.log('something has changed');
+    $('#calculate_info').text('');
+
+    if (typeof filtered_results !== 'undefined' && filtered_results.length > 0) {
+      $('#product_container').text('');
+      
+      _.forEach(filtered_results, function(result) {
+        
+
+
+        
+var product_item_html = '';
+        
+
+        
+        jQuery.getJSON(window.Shopify.routes.root + 'products/' + result.handle + '.js', function(product) {
+          
+          
+          if(result.variant_id != 000000000000000)
+          {
+                filtered_variant = _.filter(
+                product.variants, ({id}) => 
+                id == result.variant_id
+              )
+
+
+
+              if (typeof filtered_variant !== 'undefined' && filtered_variant.length > 0) {
+
+
+               product_item_html = `<div class="product_item" 
+onclick="calculate_cbd(this);" 
+data-animal="${result.animal}" 
+data-category="${result.category}"
+data-handle="${result.handle}"
+data-variant-id="${result.variant_id}"
+data-mg-cbd="${result.mg_cbd}"
+data-treats-volume="${result.treats_per_container}"
+data-bottle-volume="${result.bottle_volume}"
+data-title="${filtered_variant[0].title}"
+data-price="${(filtered_variant[0].price / 100)}"
+>
+
+<div class="">
+	<img src="${filtered_variant[0].featured_image.src}" alt="${filtered_variant[0].title}" width="100px" >
+  </div>
+<div class="">
+  <p><strong>${product.title}</strong></p>
+	<p><small>${filtered_variant[0].title}</small></p>
+	<p>$${(filtered_variant[0].price / 100)}</p>
+  </div>
+    
+      </div>`;  
+
+
+            $('#product_container').append(product_item_html);
+
+              }
+          }
+          else
+          {
+
+
+               product_item_html = `<div class="product_item" 
+onclick="calculate_cbd(this);" 
+data-animal="${result.animal}" 
+data-category="${result.category}"
+data-handle="${result.handle}"
+data-variant-id="${result.variant_id}"
+data-mg-cbd="${result.mg_cbd}"
+data-treats-volume="${result.treats_per_container}"
+data-bottle-volume="${result.bottle_volume}"
+data-title="${product.title}"
+data-price="${(product.price / 100)}"
+>
+
+<div class="">
+<img src="${product.featured_image}" alt="${product.title}" width="100px" >
+</div>
+<div class="">
+<p><strong>${product.title}</strong></p>
+	<p>$${(product.price / 100)}</p>
+</div>
+    
+      </div>`;  
+
+
+            $('#product_container').append(product_item_html);
+
+
+          }
+  			
+          
+		});
+        
+
+
+
+        
+        
+      });
+      
+    
+}
+    else
+    {
+      $('#product_container').text('we dont have products matching the criteria');
+    
+    }
+  });
+  
+  });
+  
+  
+function calculate_cbd(product){   
+  
+  var calc_results = '';
+  var low_dose = '';
+  var high_dose = '';
+  var low_dose_product_last = '';
+  var high_dose_product_last = '';
+  var mg_per_unit = '';
+
+  $('.product_item').css('border', 'none');
+  $(product).css('border', '1px solid lightskyblue ');
+  
+  calc_results = '<h4>' + $(product).data('title') + '</h4>';
+  
+switch ($(product).data('category'))
+{
+    // ======== CBD OIL CALCULATOR =========
+    
+    // ### CBD OIL - DOGS & CATS
+  case 'cbd_oil':
+    if($(product).data('animal') == 'dog' || $(product).data('animal') == 'cat') {
+      
+      calc_results += '<div class="dosage-cards-container">';
+      
+      calc_results += '<div class="dosage-card">';
+      
+      calc_results += '<h5>Regular dosage</h5>';
+      
+      mg_per_unit = $(product).data('mg-cbd')/$(product).data('bottle-volume')
+      
+      low_dose = Math.round((((animal_weight/2.2)*1)/mg_per_unit)*30);
+      calc_results += '<p>Dosage (twice daily) - drops: ' + low_dose + '</p>';
+      
+      low_dose_product_last = ((($(product).data('bottle-volume')*30)/low_dose)/2).toFixed(2);
+      calc_results += '<p>Product will last (used twice a day): ' + low_dose_product_last + '</p>';
+      
+      calc_results += '<p>Cost per day (one time purchase): $' + ($(product).data('price')/low_dose_product_last).toFixed(2) + '</p>';
+      calc_results += '<p>Cost per day (subscription): $' + (($(product).data('price')/low_dose_product_last)*0.7).toFixed(2) + '</p>';
+      
+      calc_results += '</div>';
+      calc_results += '<div class="dosage-card">';
+      
+      calc_results += '<h5>High dosage</h5>';
+      high_dose = Math.round((((animal_weight/2.2)*2)/mg_per_unit)*30);
+      calc_results += '<p>Dosage (twice daily) - drops: ' + high_dose + '</p>';
+      
+      high_dose_product_last = ((($(product).data('bottle-volume')*30)/high_dose)/2).toFixed(2);
+      calc_results += '<p>Product will last (used twice a day): ' + high_dose_product_last + '</p>';
+      
+      
+      calc_results += '<p>Cost per day (one time purchase): $' + ($(product).data('price')/high_dose_product_last).toFixed(2) + '</p>';
+      calc_results += '<p>Cost per day (subscription): $' + (($(product).data('price')/high_dose_product_last)*0.7).toFixed(2) + '</p>';
+      
+      calc_results += '</div>';
+      calc_results += '</div>';
+      
+      calc_results += '<br />';
+      
+      calc_results += '<p>Cost per mg of CBD: $' + ( $(product).data('price')/$(product).data('mg-cbd') ).toFixed(2) + '</p>';
+      calc_results += '<p>Cost per mg of CBD (subscription): $' + (($(product).data('price')/$(product).data('mg-cbd'))*0.7).toFixed(2) + '</p>';
+      
+    }
+    // ### CBD OIL - BIRDS
+    else if($(product).data('animal') == 'bird') {
+      calc_results += '<div class="dosage-cards-container">';
+      
+      calc_results += '<div class="dosage-card">';
+      
+      calc_results += '<h5>Regular dosage</h5>';
+      
+      mg_per_unit = $(product).data('mg-cbd')/$(product).data('bottle-volume')
+
+      low_dose = Math.round((((animal_weight/1000)*0.5)/mg_per_unit)*30);
+      calc_results += '<p>Dosage (twice daily) - drops: ' + low_dose + '</p>';
+      
+      low_dose_product_last = ((($(product).data('bottle-volume')*30)/low_dose)/2).toFixed(2);
+      calc_results += '<p>Product will last (used twice a day): ' + low_dose_product_last + '</p>';
+      
+      calc_results += '<p>Cost per day (one time purchase): $' + ($(product).data('price')/low_dose_product_last).toFixed(2) + '</p>';
+      calc_results += '<p>Cost per day (subscription): $' + (($(product).data('price')/low_dose_product_last)*0.7).toFixed(2) + '</p>';
+      
+      calc_results += '</div>';
+      calc_results += '<div class="dosage-card">';
+      
+      calc_results += '<h5>High dosage</h5>';
+      high_dose = Math.round((((animal_weight/1000)*1)/mg_per_unit)*30);
+      calc_results += '<p>Dosage (twice daily) - drops: ' + high_dose + '</p>';
+      
+      high_dose_product_last = ((($(product).data('bottle-volume')*30)/high_dose)/2).toFixed(2);
+      calc_results += '<p>Product will last (used twice a day): ' + high_dose_product_last + '</p>';
+      
+      
+      calc_results += '<p>Cost per day (one time purchase): $' + ($(product).data('price')/high_dose_product_last).toFixed(2) + '</p>';
+      calc_results += '<p>Cost per day (subscription): $' + (($(product).data('price')/high_dose_product_last)*0.7).toFixed(2) + '</p>';
+      
+      calc_results += '</div>';
+      calc_results += '</div>';
+      
+      calc_results += '<br />';
+      
+      calc_results += '<p>Cost per mg of CBD: $' + ( $(product).data('price')/$(product).data('mg-cbd') ).toFixed(2) + '</p>';
+      calc_results += '<p>Cost per mg of CBD (subscription): $' + (($(product).data('price')/$(product).data('mg-cbd'))*0.7).toFixed(2) + '</p>';
+      
+    }
+    // ### CBD OIL - HORSES
+    else if($(product).data('animal') == 'horse') {
+      calc_results += '<div class="dosage-cards-container">';
+      
+      calc_results += '<div class="dosage-card">';
+      
+      calc_results += '<h5>Regular dosage</h5>';
+      
+      mg_per_unit = $(product).data('mg-cbd')/$(product).data('bottle-volume')
+
+      low_dose = Math.round((((animal_weight/2.2)*1)/mg_per_unit));
+      calc_results += '<p>Dosage (twice daily) - drops: ' + low_dose + '</p>';
+      
+      low_dose_product_last = ((($(product).data('bottle-volume'))/low_dose)/2).toFixed(2);
+      calc_results += '<p>Product will last (used twice a day): ' + low_dose_product_last + '</p>';
+      
+      calc_results += '<p>Cost per day (one time purchase): $' + ($(product).data('price')/low_dose_product_last).toFixed(2) + '</p>';
+      calc_results += '<p>Cost per day (subscription): $' + (($(product).data('price')/low_dose_product_last)*0.7).toFixed(2) + '</p>';
+      
+      calc_results += '</div>';
+      calc_results += '<div class="dosage-card">';
+      
+      calc_results += '<h5>High dosage</h5>';
+      high_dose = Math.round((((animal_weight/2.2)*2)/mg_per_unit));
+      calc_results += '<p>Dosage (twice daily) - drops: ' + high_dose + '</p>';
+      
+      high_dose_product_last = ((($(product).data('bottle-volume'))/high_dose)/2).toFixed(2);
+      calc_results += '<p>Product will last (used twice a day): ' + high_dose_product_last + '</p>';
+      
+      
+      calc_results += '<p>Cost per day (one time purchase): $' + ($(product).data('price')/high_dose_product_last).toFixed(2) + '</p>';
+      calc_results += '<p>Cost per day (subscription): $' + (($(product).data('price')/high_dose_product_last)*0.7).toFixed(2) + '</p>';
+      
+      calc_results += '</div>';
+      calc_results += '</div>';
+      
+      calc_results += '<br />';
+      
+      calc_results += '<p>Cost per mg of CBD: $' + ( $(product).data('price')/$(product).data('mg-cbd') ).toFixed(2) + '</p>';
+      calc_results += '<p>Cost per mg of CBD (subscription): $' + (($(product).data('price')/$(product).data('mg-cbd'))*0.7).toFixed(2) + '</p>';
+      
+    }
+    else {
+      calc_results += 'Something went wrong';
+    }
+    break;
+
+    // ======== CBD TREATS 120 CALCULATOR =========
+    // ### CBD TREATS 120 - DOGS OR CATS
+  case 'cbd_treats_120':
+    if($(product).data('animal') == 'dog' || $(product).data('animal') == 'cat') {
+      calc_results += '<div class="dosage-cards-container">';
+      
+      calc_results += '<div class="dosage-card">';
+      
+      calc_results += '<h5>Regular dosage</h5>';
+      
+      mg_per_unit = $(product).data('mg-cbd')/$(product).data('treats-volume')
+
+      low_dose = Math.ceil((((animal_weight/2.2)*3)/mg_per_unit));
+      calc_results += '<p>Dosage (twice daily) - treats: ' + low_dose + '</p>';
+      
+      low_dose_product_last = ((120/low_dose)/2).toFixed(2);
+      calc_results += '<p>Product will last (used twice a day): ' + low_dose_product_last + '</p>';
+      
+      calc_results += '<p>Cost per day (one time purchase): $' + ($(product).data('price')/low_dose_product_last).toFixed(2) + '</p>';
+      calc_results += '<p>Cost per day (subscription): $' + (($(product).data('price')/low_dose_product_last)*0.7).toFixed(2) + '</p>';
+      
+      calc_results += '</div>';
+      calc_results += '<div class="dosage-card">';
+      
+      calc_results += '<h5>High dosage</h5>';
+      high_dose = Math.ceil((((animal_weight/2.2)*6)/mg_per_unit));
+      calc_results += '<p>Dosage (twice daily) - treats: ' + high_dose + '</p>';
+      
+      high_dose_product_last = ((120/high_dose)/2).toFixed(2);
+      calc_results += '<p>Product will last (used twice a day): ' + high_dose_product_last + '</p>';
+      
+      
+      calc_results += '<p>Cost per day (one time purchase): $' + ($(product).data('price')/high_dose_product_last).toFixed(2) + '</p>';
+      calc_results += '<p>Cost per day (subscription): $' + (($(product).data('price')/high_dose_product_last)*0.7).toFixed(2) + '</p>';
+      
+      calc_results += '</div>';
+      calc_results += '</div>';
+      
+      calc_results += '<br />';
+      
+      calc_results += '<p>Cost per mg of CBD: $' + ( $(product).data('price')/$(product).data('mg-cbd') ).toFixed(2) + '</p>';
+      calc_results += '<p>Cost per mg of CBD (subscription): $' + (($(product).data('price')/$(product).data('mg-cbd'))*0.7).toFixed(2) + '</p>';
+      
+    }
+    else {
+      calc_results += 'Something went wrong';
+    }
+    break;
+    
+    // ======== CBD TREATS 5 CALCULATOR =========
+  case 'cbd_treats_5':
+    if($(product).data('animal') == 'dog' || $(product).data('animal') == 'cat') {
+      calc_results += '<div class="dosage-cards-container">';
+      
+      calc_results += '<div class="dosage-card">';
+      
+      calc_results += '<h5>Regular dosage</h5>';
+      
+      mg_per_unit = $(product).data('mg-cbd')/$(product).data('treats-volume')
+
+      low_dose = Math.ceil((((animal_weight/2.2)*3)/mg_per_unit));
+      calc_results += '<p>Dosage (twice daily) - treats: ' + low_dose + '</p>';
+      
+      low_dose_product_last = (5/low_dose).toFixed(2);
+      calc_results += '<p>Doses per jar: ' + low_dose_product_last + '</p>';
+      
+      calc_results += '<p>Cost per day (one time purchase): $' + ($(product).data('price')/low_dose_product_last).toFixed(2) + '</p>';
+      calc_results += '<p>Cost per day (subscription): $' + (($(product).data('price')/low_dose_product_last)*0.7).toFixed(2) + '</p>';
+      
+      calc_results += '</div>';
+      calc_results += '<div class="dosage-card">';
+      
+      calc_results += '<h5>High dosage</h5>';
+      high_dose = Math.ceil((((animal_weight/2.2)*6)/mg_per_unit));
+      calc_results += '<p>Dosage (twice daily) - treats: ' + high_dose + '</p>';
+      
+      high_dose_product_last = (5/high_dose).toFixed(2);
+      calc_results += '<p>Doses per jar: ' + high_dose_product_last + '</p>';
+      
+      
+      calc_results += '<p>Cost per day (one time purchase): $' + ($(product).data('price')/high_dose_product_last).toFixed(2) + '</p>';
+      calc_results += '<p>Cost per day (subscription): $' + (($(product).data('price')/high_dose_product_last)*0.7).toFixed(2) + '</p>';
+      
+      calc_results += '</div>';
+      calc_results += '</div>';
+      
+      calc_results += '<br />';
+      
+      calc_results += '<p>Cost per mg of CBD: $' + ( $(product).data('price')/$(product).data('mg-cbd') ).toFixed(2) + '</p>';
+      calc_results += '<p>Cost per mg of CBD (subscription): $' + (($(product).data('price')/$(product).data('mg-cbd'))*0.7).toFixed(2) + '</p>';
+      
+    }
+    else {
+      calc_results += 'Something went wrong';
+    }
+    break;
+    
+  default:
+    calc_results = 'Something went wrong';
+}
+  
+  
+  calc_results += '<a class="buy-now-btn" href="/products/' + $(product).data('handle') + '?variant=' + $(product).data('variant-id') + '">Buy now ' + $(product).data('title') + '</a>';
+  
+  
+  $('#calculate_info').html(calc_results);
+}
+
+</script>
+
+<style>
+  .buy-now-btn {
+    background: #29abe2;
+    color: #fff !important;
+    text-align: center;
+    display: block;
+    border-radius: 4px;
+    padding: 20px !important;
+    font-weight: bold;
+  }
+  
+  .buy-now-btn:hover {
+    background: #1c86b3;
+  }
+  
+  .dosage-cards-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    gap: 20px;
+  }
+  
+  .dosage-card {
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    flex-grow: 1;
+  }
+</style>

@@ -1,0 +1,155 @@
+
+{% if request.design_mode %}
+<style>.pf-ph{font-size:14px!important;background:#fafafa;padding:20px;text-align:center;border:1px solid #f0f0f0;border-radius:4px;margin:15px}.pf-ph span{display:block;background:#e6f7ff;padding:8px 15px;border:1px solid #91d5ff}</style>
+{% endif %}
+{% if section.settings.section_id.size > 0 %}
+  {% assign snippet_name = section.settings.section_id %}
+  {% capture content %}{% include snippet_name %}{% endcapture %}
+  {% if content contains "Liquid error" %}
+    
+    {% if request.design_mode %}
+      <div class="pf-ph">
+        <h3>PageFly Section</h3>
+        <span>No section selected. Please select your section from the list</span>
+      </div>
+    {% endif %}
+  
+  {% else %}
+    {% render 'pagefly-settings' %}
+    {% include snippet_name %}
+  {% endif %}
+  {% else %}
+    
+    {% if request.design_mode %}
+      <div class="pf-ph">
+        <h3>PageFly Section</h3>
+        <span>No section selected. Please select your section from the list</span>
+      </div>
+    {% endif %}
+  
+{% endif %}
+
+{% schema %}
+{
+  "name": "PageFly Section",
+  "settings": [
+    {
+      "id": "section_id",
+      "type": "select",
+      "label": "Sections",
+      "options": [
+        {
+          "label": "Select section",
+          "value": ""
+        },
+        {
+          "label": "all blog cta",
+          "value": "pf-79fb1dd3"
+        },
+        {
+          "label": "Biscuit's CTA",
+          "value": "pf-a1b9513a"
+        },
+        {
+          "label": "Aggression CTA Level 1",
+          "value": "pf-4fed62a3"
+        },
+        {
+          "label": "Anxiety CTA Level 1",
+          "value": "pf-cb7192b0"
+        },
+        {
+          "label": "Pain CTA Level 1",
+          "value": "pf-8bf725fe"
+        },
+        {
+          "label": "Cancer CTA Level 1",
+          "value": "pf-a295c00d"
+        },
+        {
+          "label": "Seizures CTA Level 1",
+          "value": "pf-95caa4b5"
+        },
+        {
+          "label": "Arthritis CTA Level 1",
+          "value": "pf-c10b1d9d"
+        },
+        {
+          "label": "quiz",
+          "value": "pf-c5d8d484"
+        },
+        {
+          "label": "new cbd oil1111",
+          "value": "pf-f4e12ef4"
+        },
+        {
+          "label": "fbt",
+          "value": "pf-cac205df"
+        },
+        {
+          "label": "new prod descc with 123",
+          "value": "pf-506d6122"
+        },
+        {
+          "label": "valueprops cbd oil",
+          "value": "pf-a4a0dc60"
+        },
+        {
+          "label": "new oil description",
+          "value": "pf-92389084"
+        },
+        {
+          "label": "Blue CTA ",
+          "value": "pf-458855a7"
+        },
+        {
+          "label": "cbd oil for dogs",
+          "value": "pf-3bd4d66b"
+        },
+        {
+          "label": "why choose",
+          "value": "pf-19c5c1dd"
+        },
+        {
+          "label": "add",
+          "value": "pf-00c06c6a"
+        },
+        {
+          "label": "Quiz Dog",
+          "value": "pf-456c2d1a"
+        },
+        {
+          "label": "Comparison Table",
+          "value": "pf-98e24f89"
+        },
+        {
+          "label": "cbd oil for dogs product dwescription",
+          "value": "pf-73da8074"
+        },
+        {
+          "label": "products",
+          "value": "pf-64b2ccd4"
+        }
+      ]
+    },
+    {
+      "type": "paragraph",
+      "content": "Find and edit your section on the [section listing](https://apps.pagefly.io/sections)"
+    },
+    {
+      "type": "paragraph",
+      "content": "To add block to a section, please use the App Block element on PageFly section editor."
+    }
+  ],
+  "blocks": [
+    {
+      "type": "@app"
+    }
+  ],
+  "presets": [
+    {
+      "name": "PageFly Section"
+    }
+  ]
+}
+{% endschema %}

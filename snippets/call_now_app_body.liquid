@@ -1,0 +1,71 @@
+<style>
+    /*** sticky bar styles start ***/
+    #call-now-btn-stickybar-wrapper {
+      display: flex;
+      justify-content: center;
+      position: sticky;
+      padding: 4px 0;
+      bottom: 0;
+      width: 100%;
+      text-align: center;
+      z-index: 999;
+    }
+
+    #call-now-btn-stickybar-wrapper #call-now-btn-stickybar-inner-wrapper {
+      display: flex;
+      align-items: center;
+    }
+
+    #call-now-btn-stickybar-wrapper #call-now-btn-stickybar-inner-wrapper #call-now-btn-stickybar-icon {
+      margin-right: 5px;
+      height: 100%;
+    }
+
+    #call-now-btn-stickybar-wrapper #call-now-btn-stickybar-inner-wrapper #call-now-btn-stickybar-text {
+      line-height: 1;
+    }
+    /*** sticky bar styles end ***/
+
+
+    /*** floating button styles start ***/
+    #call-now-btn-floating-wrapper {
+      display: flex;
+      position: sticky;
+      z-index: 99;
+      justify-content: center;
+      align-items: center;
+    }
+
+    #call-now-btn-floating-wrapper.pulse {
+      -webkit-animation: pulse 1.6s infinite;
+      -moz-animation: pulse 1.6s infinite;
+      -o-animation: pulse 1.6s infinite;
+      animation: pulse 1.6s infinite;
+    }
+
+    #call-now-btn-floating-wrapper.pulse:hover {
+      -webkit-animation: none;
+      -moz-animation: none;
+      -o-animation: none;
+      animation: none;
+    }
+
+    #call-now-btn-floating-wrapper.glowing {
+      -webkit-animation: glowing 2s infinite;
+      -moz-animation: glowing 2s infinite;
+      -o-animation: glowing 2s infinite;
+      animation: glowing 2s infinite;
+    }
+
+    #call-now-btn-floating-wrapper.glowing:hover {
+      -webkit-animation: none;
+      -moz-animation: none;
+      -o-animation: none;
+      animation: none;
+    }
+
+    #call-now-btn-floating-wrapper #call-now-btn-floating-icon {
+      display: flex;
+    }
+    /*** floating button styles end ***/
+    </style>

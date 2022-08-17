@@ -1,0 +1,692 @@
+<div class="product-template__container page-width"
+  id="ProductSection-{{ section.id }}"
+  data-section-id="{{ section.id }}"
+  data-section-type="product"
+  data-enable-history-state="true"
+>
+  {% comment %}
+    Get first variant, or deep linked one
+  {% endcomment %}
+  {%- assign current_variant = product.selected_or_first_available_variant -%}
+  {%- assign product_image_zoom_size = '1024x1024' -%}
+  {%- assign product_image_scale = '2' -%}
+  {%- assign enable_zoom = section.settings.enable_zoom -%}
+  {%- assign compare_at_price = current_variant.compare_at_price -%}
+  {%- assign price = current_variant.price -%}
+
+  {% case section.settings.image_size %}
+    {% when 'small' %}
+      {%- assign product_image_width = 'medium-up--one-third' -%}
+      {%- assign product_description_width = 'medium-up--two-thirds' -%}
+      {%- assign product_thumbnail_width = 'medium-up--one-third' -%}
+      {%- assign height = 345 -%}
+    {% when 'medium' %}
+      {%- assign product_image_width = 'medium-up--one-half' -%}
+      {%- assign product_description_width = 'medium-up--one-half' -%}
+      {%- assign product_thumbnail_width = 'medium-up--one-quarter' -%}
+      {%- assign height = 530 -%}
+    {% when 'large' %}
+      {%- assign product_image_width = 'medium-up--two-thirds' -%}
+      {%- assign product_description_width = 'medium-up--one-third' -%}
+      {%- assign product_thumbnail_width = 'medium-up--one-fifth' -%}
+      {%- assign height = 720 -%}
+    {% when 'full' %}
+      {%- assign product_image_width = '' -%}
+      {%- assign product_description_width = '' -%}
+      {%- assign product_thumbnail_width = 'medium-up--one-eighth' -%}
+      {%- assign height = 1090 -%}
+      {%- assign enable_zoom = false -%}
+  {% endcase %}
+
+  <div class="grid product-single{% if section.settings.enable_payment_button %} product-single--{{ section.settings.image_size }}-image{% endif %}">
+    <div class="grid__item product-single__photos {{ product_image_width }}{% if section.settings.image_size == 'full' %} product-single__photos--full{% endif %}">
+      {%- assign featured_image = product.selected_or_first_available_variant.featured_image | default: product.featured_image -%}
+      {% for image in product.images %}
+        {% capture img_id %}FeaturedImage-{{ section.id }}-{{ image.id }}{% endcapture %}
+        {% capture img_class %}product-featured-img{% endcapture %}
+        {% capture zoom_img_id %}FeaturedImageZoom-{{ section.id }}-{{ image.id }}{% endcapture %}
+        {% capture img_wrapper_id %}{{ zoom_img_id }}-wrapper{% endcapture %}
+        {%- assign img_url = image | img_url: '1x1' | replace: '_1x1.', '_{width}x.' -%}
+
+        {% include 'image-style' with small_style: true, width: height, height: height, wrapper_id: img_wrapper_id, img_id: img_id %}
+
+        <div id="{{ img_wrapper_id }}" class="product-single__photo-wrapper js">
+          <div
+          id="{{ zoom_img_id }}"
+          style="padding-top:{{ 1 | divided_by: image.aspect_ratio | times: 100}}%;"
+          class="product-single__photo{% if enable_zoom %} js-zoom-enabled{% endif %}{% if product.images.size > 1 %} product-single__photo--has-thumbnails{% endif %}{% unless featured_image == image %} hide{% endunless %}"
+          data-image-id="{{ image.id }}"
+          {% if enable_zoom %} data-zoom="{{ image | img_url: product_image_zoom_size, scale: product_image_scale }}"{% endif %}>
+            <img id="{{ img_id }}"
+                 class="feature-row__image {{ img_class }} lazyload{% unless featured_image == image %} lazypreload{% endunless %}"
+                 src="{{ image | img_url: '300x300' }}"
+                 data-src="{{ img_url }}"
+                 data-widths="[180, 360, 540, 720, 900, 1080, 1296, 1512, 1728, 2048]"
+                 data-aspectratio="{{ image.aspect_ratio }}"
+                 data-sizes="auto"
+                 tabindex="-1"
+                 alt="{{ image.alt | escape }}">
+          </div>
+        </div>
+      {% endfor %}
+ 
+      <noscript>
+        {% capture product_image_size %}{{ height }}x{% endcapture %}
+        <img src="{{ featured_image | img_url: product_image_size, scale: product_image_scale }}" alt="{{ featured_image.alt }}" id="FeaturedImage-{{ section.id }}" class="product-featured-img" style="max-width: {{ height }}px;">
+      </noscript>
+
+      {% if product.images.size > 1 %}
+        {% if product.images.size > 3 %}
+          {%- assign enable_thumbnail_slides = true -%}
+        {% endif %}
+
+        <div class="thumbnails-wrapper{% if enable_thumbnail_slides == true %} thumbnails-slider--active{% endif %}">
+          {% if enable_thumbnail_slides == true %}
+            <button type="button" class="btn btn--link medium-up--hide thumbnails-slider__btn thumbnails-slider__prev thumbnails-slider__prev--{{ section.id }}">
+              {% include 'icon-chevron-left' %}
+              <span class="icon__fallback-text">{{ 'sections.slideshow.previous_slide' | t }}</span>
+            </button>
+          {% endif %}
+          <ul class="grid grid--uniform product-single__thumbnails product-single__thumbnails-{{ section.id }}">
+            {% for image in product.images %}
+              <li class="grid__item {{ product_thumbnail_width }} product-single__thumbnails-item js">
+                <a href="{{ image.src | img_url: product_image_zoom_size, scale: product_image_scale }}"
+                   class="text-link product-single__thumbnail product-single__thumbnail--{{ section.id }}"
+                   data-thumbnail-id="{{ image.id }}"
+                   {% if enable_zoom %}data-zoom="{{ image.src | img_url: product_image_zoom_size, scale: product_image_scale }}"{% endif %}>
+                     <img class="product-single__thumbnail-image" src="{{ image.src | img_url: '110x110', scale: 2 }}" alt="{{ 'sections.featured_product.gallery_thumbnail_alt' | t: imageAlt: image.alt | escape }}">
+                </a>
+              </li>
+            {% endfor %}
+          </ul>
+          {% if enable_thumbnail_slides == true %}
+            <button type="button" class="btn btn--link medium-up--hide thumbnails-slider__btn thumbnails-slider__next thumbnails-slider__next--{{ section.id }}">
+              {% include 'icon-chevron-right' %}
+              <span class="icon__fallback-text">{{ 'sections.slideshow.next_slide' | t }}</span>
+            </button>
+          {% endif %}
+        </div>
+      {% endif %}
+    </div>
+
+    <div class="grid__item {{ product_description_width }}">
+      <div class="product-single__meta">
+
+        <h1 class="product-single__title">{{ product.title }}</h1>
+        
+        {% assign my_description = product.description | split: '<!-- split -->'  %}
+
+        
+        <!-- <a href="https://www.relievet.com/pages/lab-results"> We care about the quality of our products - <font color="#29abe2"> <u>Lab Results</u> </font> </a>--> 
+
+      <p>
+
+<div class="yotpo bottomLine"
+    data-appkey="77wSkVVPKM0wttZgJyvHTdz74QiWCE2Y0HsTvjrY"
+    data-domain="{{shop.permanent_domain | escape }}"
+    data-product-id="{{ product.id }}"
+    data-product-models="{{ product.id }}"
+    data-name="{{ product.title | escape }}"
+    data-url="{{ shop.url }}{{ product.url }}"
+    data-image-url="{{ product.featured_image | product_img_url: 'large' |replace: '?', '%3F' | replace: '&','%26'}}"
+    data-description="{{ product.description | escape }}"
+    data-bread-crumbs="{% for tag in product.tags %}{{ tag | escape }};{% endfor %}">
+</div>              
+
+
+          <div class="product__price">
+            {% include 'product-price', variant: current_variant %}
+          </div>
+        
+          <div>{{ my_description[0] }}</div>
+
+   		<!-- 
+			<a href="https://www.relievet.com/pages/subscribe"> <font color="#29abe2"> <u>Subscribe to our Newsletter and receive <b>10% off </b> </u>   </font> </a>
+       	--> 
+          {%- if shop.taxes_included or shop.shipping_policy.body != blank -%}
+            <div class="product__policies rte">
+              {%- if shop.taxes_included -%}
+                {{ 'products.product.include_taxes' | t }}
+              {%- endif -%}
+              {%- if shop.shipping_policy.body != blank -%}
+                {{ 'products.product.shipping_policy_html' | t: link: shop.shipping_policy.url }}
+              {%- endif -%}
+            </div>
+          {%- endif -%}
+
+          {% if section.settings.show_quantity_selector %}
+            <div id="error-quantity-{{ section.id }}" class="form-message form-message--error product__quantity-error hide" tabindex="-1">
+              {% include 'icon-error' %} {{ 'products.product.quantity_minimum_message' | t }}
+            </div>
+          {% endif %}
+
+          {% capture "form_classes" -%}
+            product-form product-form-{{ section.id }}{% unless section.settings.show_variant_labels %} product-form--hide-variant-labels{% endunless %}{% if section.settings.enable_payment_button and product.has_only_default_variant%} product-form--payment-button-no-variants{% endif %}
+          {%- endcapture %}
+
+          {% form 'product', product, data-productid: product.id, class:form_classes, novalidate: 'novalidate' %}
+
+
+
+
+            {% unless product.has_only_default_variant %}
+              {% for option in product.options_with_values %}
+                <div class="selector-wrapper js product-form__item">
+                  <label {% if option.name == 'default' %}class="label--hidden" {% endif %}for="SingleOptionSelector-{{ forloop.index0 }}">
+                    {{ option.name }}
+                  </label>
+                  <select class="single-option-selector single-option-selector-{{ section.id }} product-form__input" id="SingleOptionSelector-{{ forloop.index0 }}" data-index="option{{ forloop.index }}">
+                    {% for value in option.values %}
+                      <option value="{{ value | escape }}"{% if option.selected_value == value %} selected="selected"{% endif %}>{{ value }}</option>
+                    {% endfor %}
+                  </select>
+                </div>
+              {% endfor %}
+            {% endunless %}
+
+            <select name="id" data-productid="{{ product.id }}" id="ProductSelect-{{ section.id }}" class="product-form__variants no-js">
+              {% for variant in product.variants %}
+                {% if variant.available %}
+                  <option {% if variant == product.selected_or_first_available_variant %} selected="selected" {% endif %} value="{{ variant.id }}">
+                    {{ variant.title }}
+                  </option>
+                {% else %}
+                  <option disabled="disabled">{{ variant.title }} - {{ 'products.product.sold_out' | t }}</option>
+                {% endif %}
+              {% endfor %}
+            </select>
+
+            {% if section.settings.show_quantity_selector %}
+              <div class="product-form__item product-form__item--quantity">
+                <label for="Quantity-{{ section.id }}">{{ 'products.product.quantity' | t }}</label>
+                <input type="number" id="Quantity-{{ section.id }}" name="quantity" value="1" min="1" class="product-form__input" pattern="[0-9]*">
+              </div>
+            {% endif %}
+            <div class="product-form__item product-form__item--submit{% if section.settings.enable_payment_button %} product-form__item--payment-button{% endif %}{% if product.has_only_default_variant %} product-form__item--no-variants{% endif %}">
+              <button type="submit" name="add" id="AddToCart-{{ section.id }}" {% unless current_variant.available %}disabled="disabled"{% endunless %} class="btn product-form__cart-submit{% if section.settings.enable_payment_button %} btn--secondary-accent{% endif %}">
+                <span id="AddToCartText-{{ section.id }}">
+                  {% unless current_variant.available %}
+                    {{ 'products.product.sold_out' | t }}
+                  {% else %}
+                    {{ 'products.product.add_to_cart' | t }}
+                  {% endunless %}
+                </span>
+              </button>
+              {% if section.settings.enable_payment_button %}
+                {{ form | payment_button }}
+              {% endif %}
+            </div>
+          {% endform %}
+        </div>
+
+        {%- comment -%}
+          Live region for announcing updated price and availability to screen readers
+        {%- endcomment -%}
+        <p class="visually-hidden" data-product-status
+          aria-live="polite"
+          role="status"
+        ></p>
+
+
+      <ul class="logo-bar">
+        <li class="logo-bar__item">          
+            <img src="//cdn.shopify.com/s/files/1/0079/3287/0756/files/non_psychoactive_160x160@2x.png?v=1550798678" alt="non-intoxicating icon" class="logo-bar__image">
+        </li>
+      
+        <li class="logo-bar__item">
+            <img src="//cdn.shopify.com/s/files/1/0079/3287/0756/files/100_natural_icon_160x160@2x.png?v=1550798694" alt="100% natural icon" class="logo-bar__image">
+        </li>
+      
+        <li class="logo-bar__item">
+            <img src="//cdn.shopify.com/s/files/1/0079/3287/0756/files/cruelty_free_icon_652ce548-ae00-4ec6-b8e4-65f0e36563e4_160x160@2x.png?v=1550798710" alt="cruelty free icon" class="logo-bar__image">
+        </li>
+      
+        <li class="logo-bar__item">
+            <img src="//cdn.shopify.com/s/files/1/0079/3287/0756/files/lab_tested_ico_160x160@2x.png?v=1550798726" alt="lab tested icon" class="logo-bar__image">
+        </li>
+      
+        <li class="logo-bar__item">
+            <img src="//cdn.shopify.com/s/files/1/0079/3287/0756/files/organic_hemp_160x160@2x.png?v=1550800194" alt="organically cultivated hemp icon" class="logo-bar__image">
+        </li>
+      
+    </ul>
+      
+      <style>
+        .logo-bar {margin:20px 0 10px;}
+        .logo-bar li {display:inline-block; margin:0 8px;}
+        .logo-bar li img {width:80px;}
+        
+      </style>
+      
+      
+      
+<!-- START CALCULATOR -->
+      
+      	 {% if product.id == 2197796552804 or product.id == 2761010675812 or product.id == 2761191456868 or product.id == 2761106522212 or product.id == 2761106522212 or product.id == 3230833246308 or product.id == 3230838423652 or product.id == 3230841700452 %}
+
+      		<div class="calculate">
+              
+            
+           	{% if product.id == 2197796552804 or product.id == 2761010675812 or product.id == 2761191456868 or product.id == 2761106522212 %}
+              <p style="text-align: center;"><strong>How much CBD Oil should I give my dog?</strong></p>
+			{% endif %}  
+
+            {% if product.id == 3230835867748 or product.id == 3230833246308 or product.id == 3230838423652 or product.id == 3230841700452 %}
+              <p style="text-align: center;"><strong>How much hemp oil should I give my dog?</strong></p>
+			{% endif %}   
+              
+            <button id="opencalc" style="text-align: center;">Calulate the correct dosage.</button>
+            
+            
+            <div class="calculator" id="calculator" style="display: none;">
+                <p>Please calulate the recommended dosage below:</p>
+                <label class="weight">
+                    <span>Step 1: Select Your Dog's Weight</span>
+                <select id="weight" oninput="calculate()">
+                    <option value="0"></option>
+                  
+                  {% if product.id == 2761106522212 or product.id == 3230835867748 %}
+                                  
+                    <option value="5">1 - 5 lb</option>
+                    <option value="10">5 - 10 lb</option>
+                    <option value="15">10 - 15 lb</option>
+
+                   {% endif %}
+                  
+                  {% if product.id == 2761191456868 or product.id == 3230841700452 %}
+                                  
+					<option value="20">16 - 20 lb</option>
+                    <option value="30">21 - 30 lb</option>
+                    <option value="40">31 - 40 lb</option>
+
+                   {% endif %}
+                  
+                  {% if product.id == 2197796552804 or product.id == 3230838423652 %}
+                                  
+                    <option value="50">41 - 50 lb</option>
+                    <option value="60">51 - 60 lb</option>
+                    <option value="70">61 - 70 lb</option>
+                    <option value="80">71 - 80 lb</option>
+                    <option value="90">81 - 90 lb</option>
+
+                   {% endif %}
+                  
+                  {% if product.id == 2761010675812 or product.id == 3230833246308 %}
+                                  
+                    <option value="100">91 - 100 lb</option>
+                    <option value="110">101 - 110 lb</option>
+                    <option value="120">111 - 120 lb</option>
+                    <option value="130">121 - 130 lb</option>
+                    <option value="140">131 - 140 lb</option>
+                    <option value="150">141 - 150 lb</option>
+
+                   {% endif %}
+                 
+                </select>            
+                </label>
+
+                <label>
+                    <span>Step 2: Select Your Dog's Symptoms</span>
+                    <select id="condition" oninput="calculate()" >
+                        <option value="0"></option>
+                        <option value="0.12">Anxiety</option>
+                        <option value="0.120">Agression</option>
+                        <option value="0.26">Arthritis</option>
+                        <option value="0.09">Depression</option>
+                        <option value="0.19">Inflammation</option>
+                        <option value="0.16">Mobility</option>
+                        <option value="0.23">Pain</option>
+                        <option value="0.30">Seizures</option>
+                        <option value="0.05">Well Being</option>
+                    </select>
+                </label> 
+
+                <label class="dosage">
+                    <span>Your Calculated Dosage</span>
+                    <ul>
+                    <li>Give your dog <input id="mydosage" disabled  /> 2 to 3 times a day.</li>
+                    <li>A single 30ml bottle will last <input id="days" disabled /></li>
+                      <li><button class="buy1month"> <strong>&plus;</strong> Add an additional bottle</button></li>
+       				</ul>
+                </label> 
+                <div class="clear"></div>
+
+                
+                
+            </div>
+            </div>
+
+      <style>
+                .calculate .dosage select      {width: 50px; text-align: center;}
+                .calculator         {padding:15px; border:1px solid #ccc; margin-bottom: 15px;}
+                .calculate          {padding: 30px 0px 15px; clear: both; overflow: hidden;}
+                .calculate h2       {text-transform: inherit; font-size:17px; font-family: Futura,sans-serif;
+    font-style: normal; margin-bottom: 5px; color:#69727b ; font-weight:700; }
+                .calculate label    {float: left; width:96%; margin:4% 2% 4%; position: relative;}
+                .calculate label span {font-size:12px; font-weight: bold; display: block;}
+                .calculate select   {min-width: 70%; border:none; border-bottom:1px solid #ccc; padding: 5px;}
+                .condition          {color: #000;}
+                .calculate .dosage  {width:96%; float: left;}
+                .dosage input       {width: 95px; text-align: center; padding-right: 30px; border:none; border-bottom: 1px solid #ccc; font-size: 18px; padding: 10px; margin-top: 5px;}
+        		.dosage li {list-style:disc; margin-left:20px;}
+        		.calculate button   {margin: 2% 4% 2% 0%; border-radius: 2px; border: 1px solid #2CA9E6; font-size: 14px; padding: 5px 10px; background: #fff;}
+                .calculate #days {width:150px;}
+                .calculate button:hover   {margin: 2% 4% 2% 0%; border: 1px solid #2CA9E6; font-size: 14px; padding: 5px 10px; background: #2CA9E6; color: #fff;}
+                .calculate .clear {clear: both;}
+		        #opencalc {display:block; margin:2% auto;}
+            </style>
+
+
+            <script>
+             
+           
+                function calculate() {
+
+                    var weight = document.getElementById('weight').value;	
+                    var condition = document.getElementById('condition').value;
+                    var dosage = document.getElementById('dosage');	
+                    var quantity = "1";	
+
+                  {% if product.id == 2761106522212 or product.id == 3230835867748 %}
+                                  
+                    var mgoil = "5";
+                    var product = "150";
+
+                   {% endif %}
+                  
+                  {% if product.id == 2761191456868 or product.id == 3230841700452 %}
+                                  
+                    var mgoil = "13.3";
+                    var product = "400";
+
+                   {% endif %}
+                  
+                  {% if product.id == 2197796552804 or product.id == 3230838423652 %}
+                                  
+                    var mgoil = "26.7";
+                    var product = "800";
+
+                   {% endif %}
+                  
+                  {% if product.id == 2761010675812 or product.id == 3230833246308 %}
+                                  
+                    var mgoil = "50";
+                    var product = "1500";
+
+                   {% endif %}
+
+                             
+                    if (weight > 0 && condition > 0) {
+                        var dosage = weight * condition / mgoil;
+                        var dosage2 = dosage.toFixed(2);
+                        var myDays = 30 / (dosage * 2);
+                        var myDays2 = 30 / (dosage * 3);
+                        var myMonths = 30 / myDays2;
+                      
+                      if (condition == "0.12") { var condition2 = "Anxiety"; };
+                      if (condition == "0.120") { var condition2 = "Agression"; };
+                      if (condition == "0.26") { var condition2 = "Arthritis"; };
+                      if (condition == "0.09") { var condition2 = "Depression"; };
+                      if (condition == "0.19") { var condition2 = "Inflammation"; };
+                      if (condition == "0.16") { var condition2 = "Mobility"; };
+                      if (condition == "0.23") { var condition2 = "Pain"; };
+                      if (condition == "0.30") { var condition2 = "Seizures"; };
+                      if (condition == "0.05") { var condition2 = "Well Being"; };
+
+                      var galabel = condition2.concat(" - ", weight, " lb");
+
+        
+   						ga('send', 'event', 'Dosage Calculator', 'Caclulate', galabel);
+
+                      
+                        if (myMonths < 1) {
+                            var myMonths ="1"
+                        }
+                      
+                        mydosage.value = dosage2 + ' ml';
+                        $('#mydosage').css("background-color", "yellow");
+                        days.value = Math.trunc( myDays2 ) + " - " + Math.trunc( myDays ) + ' days';
+                        $('#days').css("background-color", "yellow");
+
+  
+
+                        $(".buy1month").click(function() {
+                            ga('send', 'event', 'Increase Quantity', 'click');
+                          	$("#Quantity-product-template").val(quantity++);
+                          	$('#Quantity-product-template').css("border-color", "green");
+								setTimeout(
+								function(){
+    	                      	$('#Quantity-product-template').css("border-color", "#949494 ");
+                             }, 1000);
+                          	
+                        });
+
+                
+                    }
+                }
+            </script>
+      
+      
+      	{% endif %}
+
+      	<!-- END CALCULATOR -->      
+      
+      
+      
+        <div class="product-single__description rte">
+			{{ my_description[1] }}
+          
+        </div>
+      
+  
+      
+      
+        {% if section.settings.show_share_buttons %}
+          {% include 'social-sharing', share_title: product.title, share_permalink: product.url, share_image: product %}
+        {% endif %}
+    </div>
+  </div>
+</div>
+
+{% if collection %}
+  <div class="text-center return-link-wrapper page-width">
+    <a href="{{ collection.url }}" class="btn btn--secondary btn--has-icon-before return-link">
+      {% include 'icon-arrow-left' %}
+      {{ 'products.product.back_to_collection' | t: title: collection.title }} 
+    </a>
+  </div>
+{% endif %}
+
+{% unless product == empty %}
+  <script type="application/json" id="ProductJson-{{ section.id }}">
+    {{ product | json }}
+  </script>
+{% endunless %}
+
+
+
+{% schema %}
+{
+  "name": {
+    "de": "Produktseiten",
+    "en": "Product pages",
+    "es": "Páginas de productos",
+    "fr": "Pages de produits",
+    "it": "Pagine di prodotto",
+    "ja": "商品ページ",
+    "pt-BR": "Páginas de produtos"
+  },
+  "settings": [
+    {
+      "type": "select",
+      "id": "image_size",
+      "label": {
+        "de": "Foto-Größe",
+        "en": "Image size",
+        "es": "Tamaño de la imagen",
+        "fr": "Taille des images",
+        "it": "Dimensione immagine",
+        "ja": "画像のサイズ",
+        "pt-BR": "Tamanho da imagem"
+      },
+      "options": [
+        {
+          "value": "small",
+          "label": {
+            "de": "Klein",
+            "en": "Small",
+            "es": "Pequeña",
+            "fr": "Petite",
+            "it": "Piccolo",
+            "ja": "小",
+            "pt-BR": "Pequeno"
+          }
+        },
+        {
+          "value": "medium",
+          "label": {
+            "de": "Mittel",
+            "en": "Medium",
+            "es": "Mediana",
+            "fr": "Moyenne",
+            "it": "Medio",
+            "ja": "中",
+            "pt-BR": "Médio"
+          }
+        },
+        {
+          "value": "large",
+          "label": {
+            "de": "Groß",
+            "en": "Large",
+            "es": "Grande",
+            "fr": "Grande",
+            "it": "Grande",
+            "ja": "大",
+            "pt-BR": "Grande"
+          }
+        },
+        {
+          "value": "full",
+          "label": {
+            "de": "Volle Breite",
+            "en": "Full-width",
+            "es": "Ancho completo",
+            "fr": "Pleine largeur",
+            "it": "Intera larghezza",
+            "ja": "全幅",
+            "pt-BR": "Largura completa"
+          }
+        }
+      ],
+      "default": "medium"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_quantity_selector",
+      "label": {
+        "de": "Quantitäts-Auswahl anzeigen",
+        "en": "Show quantity selector",
+        "es": "Mostrar selector de cantidad",
+        "fr": "Afficher le sélecteur de quantité",
+        "it": "Mostra selettore quantità",
+        "ja": "数量セレクターを表示する",
+        "pt-BR": "Exibir seletor de quantidade"
+      },
+      "default": false
+    },
+    {
+      "type": "checkbox",
+      "id": "show_variant_labels",
+      "label": {
+        "de": "Varianten-Etiketten anzeigen",
+        "en": "Show variant labels",
+        "es": "Mostrar etiquetas de variantes",
+        "fr": "Afficher le nom des variantes",
+        "it": "Mostra etichette varianti",
+        "ja": "バリエーションのラベルを表示する",
+        "pt-BR": "Exibir etiquetas de variantes"
+      },
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "show_vendor",
+      "label": {
+        "de": "Lieferanten anzeigen",
+        "en": "Show vendor",
+        "es": "Mostrar proveedor",
+        "fr": "Afficher les vendeurs",
+        "it": "Mostra fornitore",
+        "ja": "販売元を表示する",
+        "pt-BR": "Exibir fornecedor"
+      },
+      "default": false
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_zoom",
+      "label": {
+        "de": "Foto-Zoom zulassen",
+        "en": "Enable image zoom",
+        "es": "Habilitar zoom de imagen",
+        "fr": "Activer le zoom d'image",
+        "it": "Abilita lo zoom dell'immagine",
+        "ja": "画像ズームを有効にする",
+        "pt-BR": "Ativar o zoom da imagem"
+      },
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_payment_button",
+      "label": {
+        "de": "Dynamischen Checkout Button anzeigen",
+        "en": "Show dynamic checkout button",
+        "es": "Mostrar botón de pago dinámico",
+        "fr": "Afficher le bouton de passage à la caisse dynamique",
+        "it": "Mostra pulsante di check-out dinamico",
+        "ja": "ダイナミックチェックアウトボタンを表示する",
+        "pt-BR": "Exibir botão dinâmico de finalização da compra"
+      },
+      "info": {
+        "de": "Jeder Kunde sieht seine bevorzugte Zahlungsmethode aus den in Ihrem Shop verfügbaren Zahlungsmethoden wie PayPal oder Apple Pay. [Mehr Infos](https://help.shopify.com/manual/using-themes/change-the-layout/dynamic-checkout)",
+        "en": "Each customer will see their preferred payment method from those available on your store, such as PayPal or Apple Pay. [Learn more](https://help.shopify.com/manual/using-themes/change-the-layout/dynamic-checkout)",
+        "es": "Cada cliente verá su forma de pago preferida entre las disponibles en tu tienda, como PayPal o Apple Pay. [Más información](https://help.shopify.com/manual/using-themes/change-the-layout/dynamic-checkout)",
+        "fr": "Chaque client verra son moyen de paiement préféré parmi ceux qui sont proposés sur votre boutique, tels que PayPal ou Apple Pay. [En savoir plus](https://help.shopify.com/manual/using-themes/change-the-layout/dynamic-checkout)",
+        "it": "Ogni cliente vedrà il suo metodo di pagamento preferito tra quelli disponibili nel tuo negozio, come PayPal o Apple Pay. [Maggiori informazioni](https://help.shopify.com/manual/using-themes/change-the-layout/dynamic-checkout)",
+        "ja": "PayPalやApple Payなど、ストアで利用可能な希望の決済方法がお客様に表示されます。[もっと詳しく] (https://help.shopify.com/manual/using-themes/change-the-layout/dynamic-checkout)",
+        "pt-BR": "Cada cliente verá seu método de pagamento preferido dentre os disponíveis na loja, como PayPal ou Apple Pay. [Saiba mais](https://help.shopify.com/manual/using-themes/change-the-layout/dynamic-checkout)"
+      },
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "show_share_buttons",
+      "label": {
+        "de": "Buttons für Social Media anzeigen",
+        "en": "Show social sharing buttons",
+        "es": "Mostrar botones para compartir en redes sociales",
+        "fr": "Affichez les boutons de partage sur les médias sociaux",
+        "it": "Mostra i pulsanti per la condivisione sui social",
+        "ja": "ソーシャル共有ボタンを表示する",
+        "pt-BR": "Exibir botões de compartilhamento em redes sociais"
+      },
+      "default": true
+    }
+  ]
+}
+{% endschema %}
+{% comment pluginspeed replaced-inliner DON'T CHANGE %}<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>{% endcomment %}{% include 'pluginspeed-inlined-jquery.min.js' %}
+
+<script>
+  
+     $( document ).ready(function() {                    
+                          
+                    $('#opencalc').click(function() {
+                        $('#opencalc').hide();
+                        $('#calculator').slideDown(500);
+                    });                                 
+                });
+  
+</script>
